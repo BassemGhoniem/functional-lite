@@ -1,12 +1,14 @@
-function output(txt) {
-	console.log(txt);
+function not(fn) {
+	return (...args) => !fn(...args);
 }
 
-function printIf(predicate) {
-	return function(msg) {
-		if (predicate(msg)) {
-			output(msg);
-		}
+function when(fn) {
+	return function(predicate){
+		return function(...args){
+			if (predicate(...args)) {
+				return fn(...args);
+			}
+		};
 	};
 }
 
@@ -14,9 +16,9 @@ function isShortEnough(str) {
 	return str.length <= 5;
 }
 
-function isLongEnough(str) {
-	return !isShortEnough(str);
-}
+const output = console.log;
+const printIf = when(output);
+const isLongEnough = not(isShortEnough);
 
 var msg1 = "Hello";
 var msg2 = msg1 + " World";
